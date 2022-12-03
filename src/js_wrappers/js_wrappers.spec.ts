@@ -1,6 +1,7 @@
-import { Result, ResultKind } from './result/types';
+import { RawJson } from './types';
+import { Result, ResultKind } from '../result/types';
 
-import { Ok, Err } from './result/helpers';
+import { Ok, Err } from '../result/helpers';
 import { parseJson, catchResult } from './js_wrappers';
 
 
@@ -24,12 +25,12 @@ describe('js wrappers', () => {
 
 	test('parseJson', () => {
 		const j1: string = '{';
-		const res1: Result<number, string> = parseJson(j1);
+		const res1: Result<number, string> = parseJson(j1 as RawJson<number>);
 		expect(res1.__kind).toEqual(ResultKind.Err);
 		expect(res1.data).toEqual('SyntaxError: Unexpected end of JSON input');
 
 		const j2: string = '{ "test": 2 }';
-		const res2: Result<object, string> = parseJson(j2);
+		const res2: Result<object, string> = parseJson(j2 as RawJson<object>);
 		expect(res2.__kind).toEqual(ResultKind.Ok);
 		expect(res2.data).toEqual({ test: 2 });
 	});
